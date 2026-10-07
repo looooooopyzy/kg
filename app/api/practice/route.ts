@@ -37,6 +37,20 @@ function parseExercise(content: string, topic: LessonId) {
   return { topic, topicName: TOPIC_NAMES[topic], stem, options, correctIndex, hint, steps, check, pitfall };
 }
 
+function extractText(message: { content?: unknown } | undefined) {
+  const content = message?.content;
+  if (typeof content === "string" && content.trim()) return content.trim();
+  if (Array.isArray(content)) {
+    const text = content.map(part => {
+      if (typeof part === "string") return part;
+      if (part && typeof part === "object" && "text" in part && typeof part.text === "string") return part.text;
+      return "";
+    }).join("").trim();
+    if (text) return text;
+  }
+  return "";
+}
+
 export async function POST(request: Request) {
   const length = Number(request.headers.get("content-length") || 0);
   if (length > 2000) return error("请求内容过长。", 413);
@@ -67,8 +81,8 @@ export async function POST(request: Request) {
     upstream = await fetch(modelConfig.upstream, {
       method: "POST",
       headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ model, messages: [{ role: "system", content: system }, { role: "user", content: user }], stream: false, max_tokens: 4096, ...(modelConfig.thinking ? { thinking: { type: "enabled" }, reasoning_effort: "low" } : {}) }),
-      signal: AbortSignal.timeout(20000),
+      body: JSON.stringify({ model, messages: [{ role: "system", content: system }, { role: "user", content: user }], stream: false, max_tokens: 12000, ...(modelConfig.thinking ? { thinking: { type: "enabled" }, reasoning_effort: "low" } : {}) }),
+      signal: AbortSignal.timeout(40000),
     });
   } catch { return error("模型连接超时或暂时不可用，请稍后重试。", 503); }
   if (!upstream.ok) {
@@ -78,8 +92,8 @@ export async function POST(request: Request) {
   }
   let data: { choices?: Array<{ message?: { content?: unknown } }> };
   try { data = await upstream.json(); } catch { return error("模型返回的数据无法解析。", 502); }
-  const content = data.choices?.[0]?.message?.content;
-  if (typeof content !== "string") return error("模型没有返回题目，请重试。", 502);
+  const content = extractText(data.choices?.[0]?.message);
+  if (!content) return error("模型没有返回题目正文。请把推理强度调低后重试，或切换到 Flash 模型。", 502);
   const exercise = parseExercise(content, topicId);
   if (!exercise) return error("模型出题格式或答案校验未通过，请重试生成。", 502);
   return Response.json({ exercise, model }, { headers: NO_STORE });

@@ -12,6 +12,20 @@ const NO_STORE = { "Cache-Control": "no-store" };
 
 type HistoryMessage = { role: "user" | "assistant"; content: string };
 
+function extractText(message: { content?: unknown; reasoning_content?: unknown } | undefined) {
+  const content = message?.content;
+  if (typeof content === "string" && content.trim()) return content.trim();
+  if (Array.isArray(content)) {
+    const text = content.map(part => {
+      if (typeof part === "string") return part;
+      if (part && typeof part === "object" && "text" in part && typeof part.text === "string") return part.text;
+      return "";
+    }).join("").trim();
+    if (text) return text;
+  }
+  return "";
+}
+
 function error(message: string, status: number) {
   return Response.json({ error: message }, { status, headers: NO_STORE });
 }
@@ -52,7 +66,7 @@ export async function POST(request: Request) {
     model,
     messages: [{ role: "system", content: system }, ...history, { role: "user", content: userContent }],
     stream: false,
-    max_tokens: 4096,
+    max_tokens: 12000,
     ...(modelConfig.thinking ? { thinking: { type: "enabled" }, reasoning_effort: "low" } : {}),
   };
   let upstream: Response;
@@ -61,7 +75,7 @@ export async function POST(request: Request) {
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
       body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(20000),
+      signal: AbortSignal.timeout(40000),
     });
   } catch {
     return error("模型连接超时或暂时不可用，请稍后重试。", 503);
@@ -71,9 +85,9 @@ export async function POST(request: Request) {
     if (upstream.status === 429) return error(`${modelConfig.provider} 调用已达到限额或当前繁忙，请检查账户额度并稍后再试。`, 429);
     return error(`模型服务返回错误（${upstream.status}）。请检查模型权限和账户额度。`, 502);
   }
-  let data: { choices?: Array<{ message?: { content?: unknown } }> };
+  let data: { choices?: Array<{ message?: { content?: unknown; reasoning_content?: unknown } }> };
   try { data = await upstream.json(); } catch { return error("模型返回的数据无法解析。", 502); }
-  const content = data.choices?.[0]?.message?.content;
-  if (typeof content !== "string" || !content.trim()) return error("模型没有返回正文，请重试或切换模型。", 502);
-  return Response.json({ answer: content.trim(), skill: routedMode, model }, { headers: NO_STORE });
+  const content = extractText(data.choices?.[0]?.message);
+  if (!content) return error("模型没有返回正文。请把推理强度调低后重试，或切换到 Flash 模型。", 502);
+  return Response.json({ answer: content, skill: routedMode, model }, { headers: NO_STORE });
 }

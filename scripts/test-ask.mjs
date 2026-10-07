@@ -45,6 +45,11 @@ try {
   assert.equal(deepseekPayload.model, "deepseek-flash");
   assert.equal(deepseekPayload.thinking, undefined);
 
+  globalThis.fetch = async () => Response.json({ choices: [{ message: { content: [{ type: "text", text: "分段回复也能正常显示。" }] } }] });
+  const arrayContent = await POST(request({ ...base, model: "deepseek-flash" }));
+  assert.equal(arrayContent.status, 200);
+  assert.equal((await arrayContent.json()).answer, "分段回复也能正常显示。");
+
   const deepseekProImage = await POST(request({ ...base, model: "deepseek-v4-pro", mode: "spatial", lesson: "cube", image: "data:image/png;base64,aGVsbG8=" }));
   assert.equal(deepseekProImage.status, 400);
 
