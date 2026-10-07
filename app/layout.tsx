@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="zh-CN"><head><meta name="theme-color" content="#25695d" /><meta name="apple-mobile-web-app-capable" content="yes" /><meta name="apple-mobile-web-app-title" content="解题有形" /><link rel="stylesheet" href="/style.css" /><link rel="stylesheet" href="/ask.css" /><link rel="stylesheet" href="/practice-draft.css" /></head><body>{children}</body></html>;
+  return <html lang="zh-CN"><head><meta name="theme-color" content="#25695d" /><meta name="apple-mobile-web-app-capable" content="yes" /><meta name="apple-mobile-web-app-title" content="解题有形" /><script src="/rich.js"></script><link rel="stylesheet" href="/style.css" /><link rel="stylesheet" href="/ask.css" /><link rel="stylesheet" href="/practice-draft.css" /></head><body>{children}</body></html>;
 }
