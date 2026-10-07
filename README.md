@@ -4,7 +4,8 @@
 
 ## 功能
 
-- **数量关系**：8 个递进知识点，包含白话解释、三步解题、动态数字实验台、原创例题与练习。图解会随滑块变化。
+- **数量关系**：8 个递进知识点，包含白话解释、三步解题、动态数字实验台、真题难度的条件转译与解题策略、原卷题目和原创练习。图解会随滑块变化。
+- **国考真题**：从 [AdministrativeAptitudeTest](https://github.com/Yaoyuan-Zhang319/AdministrativeAptitudeTest) 的 2022 年国考副省级《行测》原卷抽取数量关系题，并与仓库的参考答案 PDF 核对；当前收录可完整提取的 14 题（61–72、74–75）。每题可按知识点和难度筛选，作答后查看本站重新编写的详细步骤、验算、易错点和原卷链接。课程中也嵌入对应真题；图片选项丢失的第 73 题暂不收录。
 - **空间图推**：可拖动或用方向键旋转的 CSS 三维立方体、对应的展开图、相对面练习及图形规律识别提示。
 - **错题复盘**：答错自动归档；记录第一眼特征、错因和下次的解题动作；支持 JSON 导出。
 - **AI 答疑**：选择 GLM-5.3 或 GLM-5.3-Flash，在页面输入自己的智谱 API Key；可提问、追问、从课程带入当前知识点，或在 Flash 下上传题目图片。服务端按问题类型选择数量关系、图形推理或结构化复盘的教学规则。
@@ -12,7 +13,7 @@
 - **草稿纸**：页面右下角随时打开，支持 Apple Pencil、鼠标和触控笔；可切换画笔与橡皮、调整颜色和粗细、撤销、清空并导出 PNG。默认忽略手指触碰，可手动开启手指书写。
 - **本地进度**：掌握状态、练习和复盘记录保存在浏览器的 `localStorage` 中，无需账户。
 
-本项目所有练习题均为原创模拟题，并非官方真题。AI 讲解可能有误，需核对条件与计算。
+课程原有练习与 AI 同类题为模拟题；「国考真题」及课程中的真题卡片标注原卷出处。真题的分步解析由本站重新编写，原卷与参考答案可通过页面链接核对。AI 讲解可能有误，需核对条件与计算。
 
 ## API Key 与数据
 
@@ -41,6 +42,7 @@ npm run start
 - [kaogong-skill](https://github.com/KeWang0622/kaogong-skill)：行测题型框架与内容准确性原则。
 - [huasheng13-skill](https://github.com/WangJunqing-coder/huasheng13-skill)：数量关系方法及图推分类。
 - [kaogong-review-skill](https://github.com/zheng489/kaogong-review-skill)：错因归类与结构化复盘流程。
+- [AdministrativeAptitudeTest](https://github.com/Yaoyuan-Zhang319/AdministrativeAptitudeTest)：历年试卷与参考答案 PDF；本站只摘录当前用于讲解的题目，保留原卷链接。
 
 动态图解采用原生 HTML/CSS/JavaScript 绘制。检索过现成教学图片与立方体示例后，选择自绘图解，以便让用户调整数字并看到即时变化。
 
