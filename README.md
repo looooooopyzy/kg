@@ -36,6 +36,7 @@ npm run start
 ```
 
 默认打开 <http://127.0.0.1:8787/>。若要使用本机个人题库，先运行 `node scripts/fetch-personal-bank.mjs`，然后运行 `npm run local`（同时启动网站和本机题库服务）。开发时也可以运行 `npm run dev`。接口模拟测试：`node scripts/test-ask.mjs` 和 `node scripts/test-practice.mjs`。
+本机题库的刷题入口在左侧导航，也可直接打开 <http://127.0.0.1:8787/#bank>；选择知识点后即可做题、看解析、换题。
 
 完整的本地运行和与其他编码工具协作方式见 [`DEVELOPMENT.md`](./DEVELOPMENT.md)。Windows 可以直接运行 `npm run local`，或执行 `scripts/start-local.ps1`。
 

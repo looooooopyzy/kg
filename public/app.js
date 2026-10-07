@@ -14,7 +14,7 @@ const opposite={A:'F',F:'A',B:'D',D:'B',C:'E',E:'C'};
 const faceNames={A:'圆',B:'三角',C:'星',D:'方',E:'十字',F:'点'};
 const spatialQuestions=[{from:'A',options:['B','C','D','F'],answer:'F'},{from:'B',options:['A','C','D','E'],answer:'D'},{from:'C',options:['A','B','E','F'],answer:'E'}];
 const signalTips={position:'元素完全相同时，盯住同一个元素的位置和朝向；比较每次移动的方向与步数。',style:'图形相似且有重合线条时，试试叠加、保留共同部分，或只留下不同部分。',mark:'小黑点、圆圈或三角可能是关键标记；先看它落在哪条线、哪个角或哪个区域。',attribute:'图形很规则时，先看是否轴对称、中心对称，再看曲直与封闭。',count:'外形差别大时，数点、线、角、封闭面和独立部分；找数列变化。',space:'出现展开图时，先定位相对面，再排除把相对面画成相邻面的选项。'};
-let state=loadState();let currentLesson=state.lastLesson||'basics';let currentView='home';let hintShown=false;let answered=false;let spatialIndex=0;let spatialAnswered=false;let cubeX=-25,cubeY=-32;let drag=null;
+let state=loadState();let currentLesson=state.lastLesson||'basics';let bankTopic=currentLesson;let currentView='home';let hintShown=false;let answered=false;let spatialIndex=0;let spatialAnswered=false;let cubeX=-25,cubeY=-32;let drag=null;
 let realCatalog=null,realPromise=null,realIndex=0;const realAnswers=new Map(),inlineRealIndex=new Map();
 const practiceState=new Map();let practiceBusy=false;let practiceModel='glm-5.3-flash';let practiceLevel='basic';let apiKeyMemory='';
 const MODEL_CONFIG={
@@ -60,7 +60,7 @@ function renderExamBridge(l){const b=examBridge[l.id],f=advancedFallback[l.id];r
 function loadState(){try{let raw=JSON.parse(localStorage.getItem(STORAGE_KEY));return {mastered:raw?.mastered||[],attempts:raw?.attempts||[],reviews:raw?.reviews||[],lastLesson:raw?.lastLesson||'basics'}}catch{return {mastered:[],attempts:[],reviews:[],lastLesson:'basics'}}}
 function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}catch{}refreshStats()}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function switchView(view,focus=true){if(!['home','quantity','spatial','real','review','ask'].includes(view))view='home';currentView=view;document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active-view',x.id===view+'-view'));document.querySelectorAll('.nav-item').forEach(x=>x.classList.toggle('active',x.dataset.view===view));document.getElementById('crumb-current').textContent={home:'学习首页',quantity:'数量关系',spatial:'空间图推',real:'国考真题',review:'错题复盘',ask:'AI 答疑'}[view];document.querySelector('.sidebar').classList.remove('open');document.getElementById('mobile-menu').setAttribute('aria-expanded','false');if(view==='review')renderReviews();if(view==='quantity')renderLesson();if(view==='real')loadRealQuestions().then(renderRealView).catch(()=>{});window.scrollTo({top:0,behavior:'smooth'});if(focus)document.getElementById('main-content').focus({preventScroll:true});history.replaceState(null,'','#'+view)}
+function switchView(view,focus=true){if(!['home','quantity','bank','spatial','real','review','ask'].includes(view))view='home';currentView=view;document.querySelectorAll('.view').forEach(x=>x.classList.toggle('active-view',x.id===view+'-view'));document.querySelectorAll('.nav-item').forEach(x=>x.classList.toggle('active',x.dataset.view===view));document.getElementById('crumb-current').textContent={home:'学习首页',quantity:'数量关系',bank:'本机题库',spatial:'空间图推',real:'国考真题',review:'错题复盘',ask:'AI 答疑'}[view];document.querySelector('.sidebar').classList.remove('open');document.getElementById('mobile-menu').setAttribute('aria-expanded','false');if(view==='review')renderReviews();if(view==='quantity')renderLesson();if(view==='bank')renderBankView();if(view==='real')loadRealQuestions().then(renderRealView).catch(()=>{});window.scrollTo({top:0,behavior:'smooth'});if(focus)document.getElementById('main-content').focus({preventScroll:true});history.replaceState(null,'','#'+view)}
 document.querySelectorAll('[data-view]').forEach(el=>el.addEventListener('click',()=>switchView(el.dataset.view)));
 document.querySelectorAll('[data-go]').forEach(el=>el.addEventListener('click',()=>switchView(el.dataset.go)));
 document.getElementById('mobile-menu').addEventListener('click',()=>{const side=document.querySelector('.sidebar');side.classList.toggle('open');document.getElementById('mobile-menu').setAttribute('aria-expanded',side.classList.contains('open'))});
@@ -176,11 +176,21 @@ function renderRealCard(root,q,next,label){
   root.replaceChildren(card);
 }
 // The personal-study bank is served only by the local Windows/Node process.
-const personalBankState=new Map(),personalBankRecent=new Map();
+const personalBankState=new Map(),personalBankRecent=new Map(),personalBankRequest=new Map();
 const localBankPage=['127.0.0.1','localhost'].includes(location.hostname);
-async function renderPersonalBank(topic,force=false){
-  const root=document.getElementById('lesson-bank');
-  if(!root||!localBankPage)return;
+function renderBankView(){
+  document.getElementById('bank-topic').value=bankTopic;
+  renderPersonalBank(bankTopic,false,'bank-root');
+}
+function bankTargetIsCurrent(root,topic,requestId){
+  return root.isConnected&&personalBankRequest.get(root.id)===requestId&&(root.id==='lesson-bank'?currentLesson===topic:bankTopic===topic);
+}
+async function renderPersonalBank(topic,force=false,rootId='lesson-bank'){
+  const root=document.getElementById(rootId);
+  if(!root)return;
+  const requestId=(personalBankRequest.get(rootId)||0)+1;
+  personalBankRequest.set(rootId,requestId);
+  if(!localBankPage){root.innerHTML='<div class="lesson-block real-inline"><h3>本机题库仅在本地可用</h3><p>请在电脑上下载个人学习题库并运行 npm run local；在线版可先练习“国考真题”。</p></div>';return}
   const entry=personalBankState.get(topic);
   if(entry&&!force){showPersonalBank(root,topic,entry);return}
   root.innerHTML='<div class="lesson-block real-inline"><div class="block-label">08 / PERSONAL QUESTION BANK</div><h3>本机题库 · 同类题</h3><p>正在挑选一道文字完整的题目…</p></div>';
@@ -189,15 +199,15 @@ async function renderPersonalBank(topic,force=false){
     const response=await fetch(`http://127.0.0.1:8788/api/bank/question?topic=${encodeURIComponent(topic)}&exclude=${recent.join(',')}`,{cache:'no-store'});
     const question=await response.json();
     if(!response.ok)throw new Error(question.error||question.message||'本机题库暂时不可用。');
-    if(!root.isConnected||currentLesson!==topic)return;
+    if(!bankTargetIsCurrent(root,topic,requestId))return;
     personalBankRecent.set(topic,[...recent.slice(-9),question.id]);
     const next={question,choice:null,revealed:false};
     personalBankState.set(topic,next);
     showPersonalBank(root,topic,next);
   }catch(error){
-    if(!root.isConnected||currentLesson!==topic)return;
+    if(!bankTargetIsCurrent(root,topic,requestId))return;
     root.innerHTML=`<div class="lesson-block real-inline"><div class="block-label">08 / PERSONAL QUESTION BANK</div><h3>本机题库 · 同类题</h3><p>${esc(error.message||'本机题库暂时不可用。')} 运行 npm run local 后可在这里练习。</p><button class="text-btn" type="button" data-bank-retry>重新连接 →</button></div>`;
-    root.querySelector('[data-bank-retry]').addEventListener('click',()=>renderPersonalBank(topic,true));
+    root.querySelector('[data-bank-retry]').addEventListener('click',()=>renderPersonalBank(topic,true,rootId));
   }
 }
 function showPersonalBank(root,topic,entry){
@@ -213,7 +223,7 @@ function showPersonalBank(root,topic,entry){
   }));
   root.querySelector('[data-bank-reveal]')?.addEventListener('click',()=>{entry.revealed=true;showPersonalBank(root,topic,entry)});
   root.querySelector('[data-bank-draft]').addEventListener('click',()=>document.getElementById('draft-toggle').click());
-  root.querySelector('[data-bank-next]').addEventListener('click',()=>renderPersonalBank(topic,true));
+  root.querySelector('[data-bank-next]').addEventListener('click',()=>renderPersonalBank(topic,true,root.id));
   root.querySelector('[data-bank-ask]').addEventListener('click',()=>askFromContext('quantity',`请讲解这道题，先判断它与「${practiceTitles[topic]||'数量关系'}」的关系，再解释关键条件、列式理由和验算：\n${q.stem}\n${q.options.map((option,index)=>`${'ABCD'[index]}. ${option}`).join('\n')}`,topic));
   if(entry.revealed){
     const detail=root.querySelector('.real-detail');
@@ -222,6 +232,9 @@ function showPersonalBank(root,topic,entry){
     detail.append(feedback,analysis);
   }
 }
+document.getElementById('bank-topic').innerHTML=lessons.map(lesson=>`<option value="${lesson.id}">${esc(lesson.title)}</option>`).join('');
+document.getElementById('bank-topic').addEventListener('change',event=>{bankTopic=event.target.value;renderBankView()});
+document.getElementById('bank-new').addEventListener('click',()=>renderPersonalBank(bankTopic,true,'bank-root'));
 document.getElementById('real-topic').addEventListener('change',()=>{realIndex=0;renderRealView()});
 document.getElementById('real-level').addEventListener('change',()=>{realIndex=0;renderRealView()});
 document.getElementById('real-random').addEventListener('click',()=>{const list=filteredRealQuestions();if(!list.length)return;realIndex=list.length===1?0:(realIndex+1+Math.floor(Math.random()*(list.length-1)))%list.length;renderRealView()});
