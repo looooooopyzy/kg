@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f5f2e9">
+  <meta name="description" content="从零理解数量关系，旋转三维立方体学习图形推理，并用错题复盘巩固方法。">
+  <title>解题有形 · 行测理解实验室</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="site-shell">
+    <aside class="sidebar" aria-label="主导航">
+      <div class="brand"><div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div><div><strong>解题有形</strong><small>行测理解实验室</small></div></div>
+      <div class="nav-caption">LEARNING SPACE</div>
+      <nav class="main-nav">
+        <button class="nav-item active" data-view="home"><span class="nav-icon">⌂</span><span>学习首页</span></button>
+        <button class="nav-item" data-view="quantity"><span class="nav-icon">∑</span><span>数量关系</span><em id="nav-lesson-count">0/8</em></button>
+        <button class="nav-item" data-view="spatial"><span class="nav-icon">⬡</span><span>空间图推</span></button>
+        <button class="nav-item" data-view="review"><span class="nav-icon">↺</span><span>错题复盘</span><em id="nav-error-count">0</em></button>
+      </nav>
+      <div class="sidebar-bottom"><span class="little-star">✳</span><p>先看懂，再做对。<br>每天向前一步。</p><div class="sidebar-line"></div><small>原创互动练习 · 学习记录仅保存在本机浏览器</small></div>
+    </aside>
+
+    <div class="content-shell">
+      <header class="topbar"><button id="mobile-menu" class="mobile-menu" aria-label="打开导航" aria-expanded="false">☰</button><span class="crumb">行测 / <b id="crumb-current">学习首页</b></span><div class="topbar-right"><span class="live-dot"></span> 从零开始，也来得及 <span class="avatar">学</span></div></header>
+      <main id="main-content" tabindex="-1">
+        <section id="home-view" class="view active-view" aria-labelledby="home-title">
+          <div class="home-hero">
+            <div class="hero-copy"><div class="eyebrow"><span class="eyebrow-line"></span> 你的行测学习工作台</div><h1 id="home-title">把<span>不会</span>，<br>拆成<span>会</span>。</h1><p class="hero-lede">公式背不住，就先看懂它为什么成立。图形想不出来，就亲手转一转。这里从最基础的一步开始。</p><div class="hero-actions"><button class="primary-btn" data-go="quantity">从数量关系开始 <span>↗</span></button><button class="text-btn" data-go="spatial">试试立体图推 <span>→</span></button></div></div>
+            <div class="hero-visual" aria-hidden="true"><div class="hero-grid"></div><div class="hero-badge">LEARN<br>BY<br>DOING</div><div class="hero-equation">理解<span>＞</span>死记</div><div class="hero-cube"><div class="hero-cube-face face-one">?</div><div class="hero-cube-face face-two">△</div><div class="hero-cube-face face-three">○</div></div><div class="hero-scribble">把抽象的<br>变成看得见的 ↗</div></div>
+          </div>
+          <div class="section-intro"><div><span class="section-kicker">YOUR PATH</span><h2>今天，从哪里开始？</h2></div><p>一条适合零基础的路径：认识题型 → 动手探索 → 做题验证 → 复盘错因。</p></div>
+          <div class="path-grid"><button class="path-card path-quantity" data-go="quantity"><span class="path-no">01 / BUILD THE BASICS</span><span class="path-symbol">∑</span><h3>数量关系</h3><p>从“工作总量是什么”讲起。8 个知识点，边调数字边理解。</p><span class="path-link">进入课程 <b>↗</b></span></button><button class="path-card path-spatial" data-go="spatial"><span class="path-no">02 / SEE IT IN 3D</span><span class="path-symbol">⬡</span><h3>空间图推</h3><p>展开图对应哪个面？旋转立方体，亲眼找到答案。</p><span class="path-link">进入实验室 <b>↗</b></span></button><button class="path-card path-review" data-go="review"><span class="path-no">03 / LEARN FROM ERRORS</span><span class="path-symbol">↺</span><h3>错题复盘</h3><p>记录第一反应与错因，把“下次会做”变成具体方法。</p><span class="path-link">查看学习记录 <b>↗</b></span></button></div>
+          <div class="home-lower"><div class="quote-panel"><span class="section-kicker">A SMALL REMINDER</span><p>“一道题看懂，比十道题蒙对更有用。”</p><small>不追进度，先建立自己的解题感觉。</small></div><div class="stats-panel"><span class="section-kicker">YOUR PROGRESS</span><div class="stats-row"><div><strong id="home-complete">0</strong><small>已掌握知识点</small></div><div><strong id="home-attempts">0</strong><small>已完成练习</small></div><div><strong id="home-reviews">0</strong><small>待复盘错题</small></div></div><div class="progress-track"><span id="home-progress-bar"></span></div><small id="home-progress-text">从第一课开始，建立你的基础。</small></div></div>
+        </section>
+
+        <section id="quantity-view" class="view" aria-labelledby="quantity-title">
+          <div class="page-heading"><div><span class="section-kicker">MODULE 01 · QUANTITATIVE REASONING</span><h1 id="quantity-title">数量关系<span class="heading-punctuation">.</span></h1><p>不用一上来背公式。先看问题在说什么，再把数量之间的关系画出来。</p></div><div class="heading-stamp"><b id="quantity-progress">0 / 8</b><span>知识点已掌握</span></div></div>
+          <div class="quantity-layout"><aside class="lesson-list" aria-label="知识点列表"><div class="list-title">零基础学习路径 <span>8 LESSONS</span></div><div id="lesson-nav"></div><div class="list-tip"><span>✳</span><p>不会很正常。把题目中的“谁”“多少”“怎样变化”找出来，就已经开始解题了。</p></div></aside><article class="lesson-content" id="lesson-content"></article></div>
+        </section>
+
+        <section id="spatial-view" class="view" aria-labelledby="spatial-title">
+          <div class="page-heading"><div><span class="section-kicker">MODULE 02 · VISUAL REASONING</span><h1 id="spatial-title">空间图推<span class="heading-punctuation">.</span></h1><p>纸上的展开图难以想象？拖动下面的立方体，看看六个面怎样围成一个整体。</p></div><div class="heading-stamp"><b>3D</b><span>可交互模型</span></div></div>
+          <div class="spatial-layout"><div class="spatial-primary"><div class="lab-card"><div class="lab-header"><div><span class="section-kicker">CUBE LAB / 01</span><h2>六面体折叠实验</h2></div><span class="lab-tag">拖动可旋转 ↗</span></div><div class="cube-stage" id="cube-stage" tabindex="0" role="img" aria-label="可旋转的立方体。拖动或使用方向键旋转。"><div class="stage-grid"></div><div class="cube-shadow"></div><div class="cube" id="cube"><div class="cube-face front" data-face="A"><i>01</i><b>A</b><small>圆</small></div><div class="cube-face right" data-face="B"><i>02</i><b>B</b><small>三角</small></div><div class="cube-face top" data-face="C"><i>03</i><b>C</b><small>星</small></div><div class="cube-face left" data-face="D"><i>04</i><b>D</b><small>方</small></div><div class="cube-face bottom" data-face="E"><i>05</i><b>E</b><small>十字</small></div><div class="cube-face back" data-face="F"><i>06</i><b>F</b><small>点</small></div></div><span class="stage-axis">X / Y / Z</span></div><div class="cube-controls"><div><button id="rotate-left" class="round-btn" aria-label="向左旋转">←</button><button id="rotate-right" class="round-btn" aria-label="向右旋转">→</button><button id="rotate-up" class="round-btn" aria-label="向上旋转">↑</button><button id="rotate-down" class="round-btn" aria-label="向下旋转">↓</button></div><button id="reset-cube" class="subtle-btn">重置视角 ↺</button></div></div>
+              <div class="net-card"><div class="net-copy"><span class="section-kicker">FOLD IT IN YOUR MIND</span><h3>从展开图到立方体</h3><p>以 A 为中心，把周围四面向上折；F 从 B 的外侧折到背面。点击一个面，再观察它的对面。</p><div id="face-note" class="face-note">选择一个面，看看它与谁相对。</div></div><div class="cube-net" id="cube-net" aria-label="立方体展开图"><span class="net-spacer"></span><button data-face="C">C<small>星</small></button><span class="net-spacer"></span><span class="net-spacer"></span><button data-face="D">D<small>方</small></button><button data-face="A">A<small>圆</small></button><button data-face="B">B<small>三角</small></button><button data-face="F">F<small>点</small></button><span class="net-spacer"></span><button data-face="E">E<small>十字</small></button><span class="net-spacer"></span><span class="net-spacer"></span></div></div>
+              <div class="spatial-quiz"><div><span class="section-kicker">CHECK YOUR UNDERSTANDING</span><h3 id="spatial-question">A 面的对面是哪一面？</h3><p>先转动模型找到答案，再点击选项。</p></div><div class="spatial-options" id="spatial-options"></div><div id="spatial-feedback" class="quiz-feedback" aria-live="polite"></div><button id="next-spatial" class="text-btn" hidden>下一道空间题 →</button></div></div>
+            <aside class="spatial-aside"><div class="signal-card"><span class="section-kicker">HOW TO SEE THE PATTERN</span><h3>看图的 6 个入口</h3><p>看到不同的图，先判断从哪一种规律入手。</p><div class="signal-list"><button data-signal="position"><span>01</span><b>元素相同</b><small>位置 · 平移 / 旋转</small></button><button data-signal="style"><span>02</span><b>图形很像</b><small>样式 · 叠加 / 求同</small></button><button data-signal="mark"><span>03</span><b>有小标记</b><small>标记 · 点 / 圈的位置</small></button><button data-signal="attribute"><span>04</span><b>整齐对称</b><small>属性 · 对称 / 曲直</small></button><button data-signal="count"><span>05</span><b>杂乱不同</b><small>数量 · 点线面角</small></button><button data-signal="space"><span>06</span><b>立体展开</b><small>空间 · 相对 / 相邻面</small></button></div><div id="signal-detail" class="signal-detail">点击一个特征，查看优先观察什么。</div></div><div class="rule-card"><span class="rule-icon">✳</span><h3>对面不相邻</h3><p>立方体每个面只和 4 个面共享边。剩下的那个面，就是它的对面。</p></div></aside></div>
+        </section>
+
+        <section id="review-view" class="view" aria-labelledby="review-title"><div class="page-heading"><div><span class="section-kicker">MODULE 03 · REVIEW & REFLECT</span><h1 id="review-title">错题复盘<span class="heading-punctuation">.</span></h1><p>记录第一反应，找到卡点，把错误变成下一次的解题提示。</p></div><button class="outline-btn" id="export-records">导出学习记录 ↓</button></div><div class="review-summary"><div><span>练习总次数</span><strong id="review-total">0</strong></div><div><span>当前待复盘</span><strong id="review-open">0</strong></div><div><span>近 7 天做对</span><strong id="review-week">0</strong></div></div><div class="review-layout"><div class="review-main"><div class="section-intro compact"><div><span class="section-kicker">YOUR ERROR LOG</span><h2>每一道错题，都有线索</h2></div></div><div id="review-list"></div></div><aside class="review-guide"><span class="section-kicker">REVIEW METHOD</span><h3>3 步复盘法</h3><ol><li><b>第一眼看到了什么？</b><span>如实写下题目给你的信号。</span></li><li><b>卡在了哪里？</b><span>是概念没懂、方向判断错，还是算错？</span></li><li><b>留下一句话</b><span>下次看到同类信号，先做什么。</span></li></ol><p>记录保存在当前浏览器，导出的 JSON 可以自行备份。</p></aside></div></section>
+      </main>
+      <footer class="footer"><span>解题有形 © 2026 · 原创模拟练习</span><div>参考 <a href="https://github.com/KeWang0622/kaogong-skill" target="_blank" rel="noopener noreferrer">考公 AI 导师</a> · <a href="https://github.com/WangJunqing-coder/huasheng13-skill" target="_blank" rel="noopener noreferrer">公考花生十三 skill</a> · <a href="https://github.com/zheng489/kaogong-review-skill" target="_blank" rel="noopener noreferrer">考公复盘 skill</a></div></footer>
+    </div>
+  </div>
+  <script src="./app.js" defer></script>
+</body>
+</html>
