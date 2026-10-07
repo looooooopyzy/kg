@@ -19,9 +19,9 @@
 
 ## API Key 与数据
 
-API Key 只放在当前页面内存和当次请求中，不写入源码、浏览器存储或学习记录。页面会优先从浏览器直连所选模型的官方 OpenAI 兼容接口，直连失败再通过本站 `/api/ask` 服务端转发；服务端按所选模型转发到智谱 `https://open.bigmodel.cn/api/paas/v4/chat/completions` 或 DeepSeek `https://api.deepseek.com/chat/completions`，不保存 Key，也不把上游错误正文返回浏览器。刷新或关闭页面后需重新输入。
+API Key 默认只放在当前页面内存和当次请求中。在“AI 答疑”中勾选“在此浏览器保存 API Key”后，GLM 与 DeepSeek 的 Key 分别保存在当前浏览器、当前网站来源的 `localStorage`，刷新后可恢复；“清除已保存的 Key”会删除本地副本并清空当前输入。该设置不会把 Key 写入源码、学习记录或服务器，也不会跨设备同步。浏览器本地存储不加密，公用设备不要开启。页面会优先从浏览器直连所选模型的官方 OpenAI 兼容接口，直连失败再通过本站 `/api/ask` 服务端转发；服务端按所选模型转发到智谱 `https://open.bigmodel.cn/api/paas/v4/chat/completions` 或 DeepSeek `https://api.deepseek.com/chat/completions`，不保存 Key，也不把上游错误正文返回浏览器。
 
-生成同类题使用同一页面内存中的 Key，优先直连所选模型，失败后经 `/api/practice` 转发到对应接口。草稿笔迹单独保存在当前浏览器的 `localStorage` 中，不会随提问或出题请求发送给模型。可导出图片后手动清空。
+生成同类题与 AI 答疑共用所选模型及其 Key，优先直连所选模型，失败后经 `/api/practice` 转发到对应接口。草稿笔迹单独保存在当前浏览器的 `localStorage` 中，不会随提问或出题请求发送给模型。可导出图片后手动清空。
 
 使用者应自行确认所选模型的权限和额度。
 

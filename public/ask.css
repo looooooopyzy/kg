@@ -45,6 +45,12 @@
 .key-row button{border:1px solid #cfdad0;border-left:0;border-radius:0 10px 10px 0;background:#eff3ec;color:var(--green-dark);font-size:11px;padding:0 10px}
 .skill-route{padding:11px;border-radius:8px;background:#eaf0e7;font-size:11px;color:#477260;line-height:1.5}
 .key-actions{display:flex;align-items:center;gap:9px;min-height:34px}.key-actions .outline-btn{padding:8px 11px;font-size:10px}.key-actions .outline-btn:disabled{opacity:.6;cursor:wait}.key-actions span{font-size:10px;color:var(--green);line-height:1.4}.key-actions span.error{color:#b35940}
+.key-save-controls{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.key-save-controls label{display:inline-flex;align-items:center;gap:7px;color:var(--green-dark);font-size:11px;font-weight:700;cursor:pointer}
+.ask-settings .key-save-controls input[type=checkbox]{width:15px;height:15px;min-width:15px;margin:0;padding:0;accent-color:var(--green)}
+.key-save-controls .text-btn{font-size:10px;padding:5px 0}
+.key-save-status{min-height:15px;font-size:10px;color:var(--green);line-height:1.5}
+.key-save-status.error{color:#b35940}
 .ask-method{background:#244d43;color:#fff}
 .ask-method .section-kicker{color:#b8cfc0}
 .ask-method ol{padding-left:21px;margin:0;display:grid;gap:12px;color:#e2efe4;font-size:12px}
