@@ -1,0 +1,42 @@
+import assert from 'node:assert/strict';
+import { mkdtempSync,rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+import { DatabaseSync } from 'node:sqlite';
+import { loadFullBank,pickFullQuestion } from '../lib/full-bank.mjs';
+
+const dir=mkdtempSync(path.join(tmpdir(),'kaogong-bank-test-'));
+let bank;
+try{
+  const db=new DatabaseSync(path.join(dir,'tiku.db'));
+  db.exec(`CREATE TABLE papers(id INTEGER PRIMARY KEY,subjectName TEXT,name TEXT,category TEXT);
+    CREATE TABLE questions(id INTEGER PRIMARY KEY,questionId INTEGER,paperId INTEGER,chapter TEXT,type INTEGER,answer TEXT,answerIndex INTEGER,options TEXT,content TEXT,contentHtml TEXT,analysis TEXT,analysisHtml TEXT,material TEXT);
+    INSERT INTO papers VALUES(1,'公务员·行测','测试行测卷','测试'),(2,'公务员·申论','测试申论卷','测试');`);
+  const insert=db.prepare('INSERT INTO questions VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)');
+  const categories=['政治理论','常识判断','言语理解与表达','数量关系','判断推理','资料分析'];
+  categories.forEach((category,index)=>insert.run(index+1,index+1,1,category,1,'1',1,'["选项A","选项B","选项C","选项D"]',`${category}测试题干，判断正确答案。`,index===4?'<p>看图判断<img src="https://example.com/figure.png"></p>':'','测试参考解析','',''));
+  insert.run(7,7,1,'常识判断',2,'0,2',-1,'["甲","乙","丙","丁"]','测试多项选择题，选出全部正确项。','','多选参考解析','','');
+  insert.run(8,8,2,'作答要求',26,null,-1,'[]','根据给定资料概括主要做法，不超过200字。','','','','');
+  insert.run(9,9,1,'常识判断',3,'1',-1,'[]','这是一道测试判断题，请判断正确或错误。','','判断题解析','','');
+  db.close();
+  const index=new DatabaseSync(path.join(dir,'tiku-index.db'));
+  index.exec(`CREATE TABLE question_categories(question_id INTEGER,subject TEXT,category TEXT,sub TEXT);
+    CREATE TABLE q_material_map(question_id INTEGER,subject TEXT,material_id INTEGER);
+    CREATE TABLE q_materials(material_id INTEGER,subject TEXT,content TEXT);
+    INSERT INTO question_categories VALUES(5,'公务员·行测','判断推理','图形推理'),(8,'公务员·申论','归纳概括题','概括做法经验类');
+    INSERT INTO q_material_map VALUES(6,'公务员·行测',100);
+    INSERT INTO q_materials VALUES(100,'公务员·行测','材料中的收入为100万元。');`);index.close();
+  const materials=new DatabaseSync(path.join(dir,'materials.db'));materials.exec("CREATE TABLE materials(paperId INTEGER,title TEXT,idx INTEGER,text TEXT); INSERT INTO materials VALUES(2,'材料1',1,'社区通过居民协商和志愿服务解决问题。');");materials.close();
+  bank=loadFullBank(path.join(dir,'tiku.db'));
+  assert.equal(bank.subjects.xingce.total,8);assert.equal(bank.subjects.shenlun.total,1);
+  for(const category of categories)assert.ok(bank.subjects.xingce.categories[category].count>0);
+  const image=pickFullQuestion(bank,{subject:'xingce',category:'判断推理',sub:'图形推理'});assert.match(image.stemHtml,/<img/);assert.equal(image.id,5);
+  const data=pickFullQuestion(bank,{subject:'xingce',category:'资料分析'});assert.equal(data.materials[0].text,'材料中的收入为100万元。');
+  const multi=pickFullQuestion(bank,{subject:'xingce',id:7});assert.equal(multi.kind,'multiple');assert.deepEqual(multi.answerIndices,[0,2]);
+  const judgment=pickFullQuestion(bank,{subject:'xingce',id:9});assert.deepEqual(judgment.options,['正确','错误']);assert.deepEqual(judgment.answerIndices,[0]);
+  const essay=pickFullQuestion(bank,{subject:'shenlun',category:'归纳概括题'});assert.equal(essay.kind,'essay');assert.equal(essay.materials[0].title,'材料1');assert.equal(essay.analysis,'');assert.deepEqual(essay.answerIndices,[]);
+  assert.equal(pickFullQuestion(bank,{subject:'xingce',category:'不存在'}),null);
+  assert.equal(pickFullQuestion(bank,{subject:'other'}),null);
+  const pool=pickFullQuestion(bank,{subject:'xingce',category:'常识判断'},[2,7]);assert.equal(pool.id,9);
+  console.log('全科题库筛选、单多选、判断、图片及申论材料测试通过。');
+}finally{bank?.close();rmSync(dir,{recursive:true,force:true});}

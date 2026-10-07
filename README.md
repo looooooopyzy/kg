@@ -36,7 +36,7 @@ npm run start
 ```
 
 默认打开 <http://127.0.0.1:8787/>。若要使用本机个人题库，先运行 `node scripts/fetch-personal-bank.mjs`，然后运行 `npm run local`（同时启动网站和本机题库服务）。开发时也可以运行 `npm run dev`。接口模拟测试：`node scripts/test-ask.mjs` 和 `node scripts/test-practice.mjs`。
-本机题库的刷题入口在左侧导航，也可直接打开 <http://127.0.0.1:8787/#bank>；选择知识点后即可做题、看解析、换题。
+本机题库入口在左侧“行测 / 申论刷题”，也可直接打开 <http://127.0.0.1:8787/#bank>。行测支持政治理论、常识判断、言语理解与表达、数量关系、判断推理、资料分析，按细分题型筛选；支持单选、多选和判断题，保留原题图片、材料及解析。申论支持材料阅读、作答自动保存、字数统计、TXT 导出、复盘和 AI 点评。部分材料或解析未收录时会显示提示；图片需要联网加载，AI 点评需自行核对。
 
 完整的本地运行和与其他编码工具协作方式见 [`DEVELOPMENT.md`](./DEVELOPMENT.md)。Windows 可以直接运行 `npm run local`，或执行 `scripts/start-local.ps1`。
 

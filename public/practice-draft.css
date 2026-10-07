@@ -73,6 +73,11 @@
 .real-inline .real-card{box-shadow:none;margin-top:12px}
 .real-inline .real-card h4{font-size:20px}
 .personal-bank-analysis{margin:14px 0 0;padding:15px 17px;border-radius:11px;background:#f3f7f1;color:var(--ink);font-size:12px;line-height:1.9;white-space:pre-wrap}
+.bank-rich{font-size:14px;line-height:1.9;overflow-wrap:anywhere;overflow-x:auto}
+.bank-rich p{margin:6px 0 12px}.bank-rich img{max-width:100%;height:auto;vertical-align:middle}.bank-rich table{border-collapse:collapse;min-width:260px}.bank-rich td,.bank-rich th{border:1px solid #cbd9cd;padding:6px 10px}
+.bank-stem{margin-bottom:20px}.bank-materials details{border:1px solid #d8e2d6;border-radius:10px;padding:12px 16px;margin-top:10px}.bank-materials summary{cursor:pointer;font-weight:700;color:var(--green-dark)}.bank-materials .bank-rich{margin-top:10px;max-height:420px;overflow-y:auto}
+.bank-material-notice,.bank-image-missing{display:block;color:#a35b31;background:#fff3e4;border-radius:8px;padding:10px 13px;font-size:12px;line-height:1.8}
+.real-options button.selected{border-color:var(--green);background:#e2f1e6}.essay-editor{margin-top:24px}.essay-editor>label{display:block;font-weight:700;margin-bottom:8px}.essay-editor textarea{display:block;width:100%;box-sizing:border-box;border:1px solid #cbd9cd;border-radius:12px;padding:16px;resize:vertical;font:14px/1.9 var(--sans);background:#fbfcf8;color:var(--ink)}.essay-editor-footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--muted);margin-top:8px}.real-status.error{color:#ad5138}
 .draft-toggle{position:fixed;right:24px;bottom:22px;z-index:50;border:0;border-radius:999px;background:var(--green-dark);color:#fff;padding:13px 19px;font-weight:700;box-shadow:0 12px 30px #173d3470;display:flex;align-items:center;gap:9px}
 .draft-toggle[hidden]{display:none}
 .draft-toggle:hover{background:#0f3c34;transform:translateY(-2px)}

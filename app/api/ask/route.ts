@@ -50,8 +50,8 @@ export async function POST(request: Request) {
   if (typeof key !== "string" || key.length < 8 || key.length > 300 || !/^[\x20-\x7E]+$/.test(key)) return error("请输入有效的模型 API Key（请去掉中文空格和不可见字符）。", 400);
   if (typeof model !== "string" || !(model in MODEL_CONFIG)) return error("请选择支持的模型。", 400);
   const modelConfig = MODEL_CONFIG[model as keyof typeof MODEL_CONFIG];
-  if (typeof question !== "string" || question.trim().length < 2 || question.length > 4000) return error("问题需在 2 到 4000 字之间。", 400);
-  if (mode !== "auto" && mode !== "quantity" && mode !== "spatial" && mode !== "review") return error("答疑模式无效。", 400);
+  if (typeof question !== "string" || question.trim().length < 2 || question.length > 60000) return error("问题与材料需在 2 到 60000 字之间。", 400);
+  if (typeof mode !== 'string' || !['auto','quantity','spatial','review','verbal','logic','data','knowledge','shenlun'].includes(mode)) return error("答疑模式无效。", 400);
   if (lesson !== undefined && (typeof lesson !== "string" || lesson.length > 30)) return error("课程参数无效。", 400);
   if (image !== undefined && (typeof image !== "string" || image.length > 5_600_000 || !IMAGE_PATTERN.test(image) || Math.floor((image.length - image.indexOf(",") - 1) * 3 / 4) > 4 * 1024 * 1024)) return error("图片需为不超过 4 MB 的 PNG、JPEG 或 WebP。", 400);
   if (image && !modelConfig.supportsImage) return error(`${modelConfig.provider} 的当前模型不支持图片，请切换到支持图片的模型。`, 400);

@@ -2,6 +2,7 @@
 // Local-only API for a personal-study copy of the third-party database.
 import http from 'node:http';
 import { loadPersonalBank, pickPersonalQuestion, personalBankSummary } from '../lib/personal-bank.mjs';
+import { pickFullQuestion } from '../lib/full-bank.mjs';
 
 const port = 8788;
 let bank;
@@ -43,9 +44,10 @@ const server = http.createServer((request, response) => {
     }
     const topic = url.searchParams.get('topic') || '';
     const excluded = (url.searchParams.get('exclude') || '').split(',').slice(0, 20);
-    const question = pickPersonalQuestion(bank, topic, excluded);
+    const subject=url.searchParams.get('subject');
+    const question = subject ? pickFullQuestion(bank.full,{subject,category:url.searchParams.get('category'),sub:url.searchParams.get('sub'),id:url.searchParams.get('id')},excluded) : pickPersonalQuestion(bank, topic, excluded);
     if (!question) {
-      response.writeHead(404).end(JSON.stringify({ error: '该知识点暂无文字完整的本地题目。' }));
+      response.writeHead(404).end(JSON.stringify({ error: '当前筛选暂无题目，请换一个科目或题型。' }));
       return;
     }
     response.writeHead(200).end(JSON.stringify(question));
@@ -56,5 +58,5 @@ const server = http.createServer((request, response) => {
 
 server.listen(port, '127.0.0.1', () => {
   const summary = personalBankSummary(bank);
-  console.log(`个人题库服务：http://127.0.0.1:${port} · ${summary.available ? `${summary.eligible} 道可完整显示的数量关系题` : summary.message}`);
+  console.log(`个人题库服务：http://127.0.0.1:${port} · ${summary.available ? `行测 ${summary.subjects.xingce.total} 题，申论 ${summary.subjects.shenlun.total} 题` : summary.message}`);
 });

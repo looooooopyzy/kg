@@ -6,7 +6,7 @@
       <nav class="main-nav">
         <button class="nav-item active" data-view="home"><span class="nav-icon">⌂</span><span>学习首页</span></button>
         <button class="nav-item" data-view="quantity"><span class="nav-icon">∑</span><span>数量关系</span><em id="nav-lesson-count">0/8</em></button>
-        <button class="nav-item" data-view="bank"><span class="nav-icon">✎</span><span>本机题库 · 刷题</span></button>
+        <button class="nav-item" data-view="bank"><span class="nav-icon">✎</span><span>行测 / 申论刷题</span></button>
         <button class="nav-item" data-view="spatial"><span class="nav-icon">⬡</span><span>空间图推</span></button>
         <button class="nav-item" data-view="real"><span class="nav-icon">▤</span><span>国考真题</span></button>
         <button class="nav-item" data-view="review"><span class="nav-icon">↺</span><span>错题复盘</span><em id="nav-error-count">0</em></button>
@@ -49,10 +49,11 @@
           <div class="real-source-note"><b>资料来源</b><p>题干和选项摘自仓库中的原试卷；答案与仓库参考答案核对；步骤、提示和易错点为本站重新编写。含图片或公式丢失的题目暂不收录。可打开原卷自行核对。</p><div id="real-source-links"></div></div>
         </section>
         <section id="bank-view" class="view" aria-labelledby="bank-title">
-          <div class="page-heading"><div><span class="section-kicker">PRACTICE · PERSONAL QUESTION BANK</span><h1 id="bank-title">本机题库<span class="heading-punctuation">.</span></h1><p>按知识点挑一道文字完整的数量关系题。先独立作答，再核对解析；做错的题会进入错题复盘。</p></div><div class="heading-stamp"><b>刷题</b><span>个人学习副本</span></div></div>
-          <div class="real-toolbar bank-toolbar"><label for="bank-topic">选择知识点<select id="bank-topic"></select></label><button id="bank-new" class="outline-btn" type="button">换一道题 ↝</button></div>
+          <div class="page-heading"><div><span class="section-kicker">PRACTICE · PERSONAL QUESTION BANK</span><h1 id="bank-title">行测与申论<span class="heading-punctuation">.</span></h1><p>行测按科目和题型练习；申论先读给定资料，再独立作答、对照参考解析。学习记录和申论草稿保存在本机。</p></div><div class="heading-stamp"><b>全科</b><span>个人学习副本</span></div></div>
+          <div class="real-toolbar bank-toolbar"><label for="bank-subject">考试科目<select id="bank-subject"><option value="xingce">行测全科</option><option value="shenlun">申论</option></select></label><label for="bank-category">科目 / 题型<select id="bank-category"><option value="all">全部科目 / 题型</option></select></label><label for="bank-topic">细分题型<select id="bank-topic"><option value="all">全部细分题型</option></select></label><button id="bank-new" class="outline-btn" type="button">换一道题 ↝</button></div>
+          <div id="bank-status" class="real-status" role="status"></div>
           <div id="bank-root" aria-live="polite"></div>
-          <div class="real-source-note"><b>本机题库说明</b><p>题目只从本机个人学习副本读取，不随网站发布。需要先下载题库并运行 <code>npm run local</code>；当前按知识点展示可完整显示的数量关系题。</p></div>
+          <div class="real-source-note"><b>本机题库说明</b><p>题目与已收录的材料从本机个人学习副本读取，不随网站发布。图片从原题地址加载，需要联网。部分题目缺少材料或参考解析，页面会标注；申论 AI 点评属于学习建议。题库服务随 <code>npm run local</code> 启动。</p></div>
         </section>
         <section id="review-view" class="view" aria-labelledby="review-title"><div class="page-heading"><div><span class="section-kicker">MODULE 04 · REVIEW & REFLECT</span><h1 id="review-title">错题复盘<span class="heading-punctuation">.</span></h1><p>记录第一反应，找到卡点，把错误变成下一次的解题提示。</p></div><div class="record-actions"><button class="outline-btn" id="export-records">导出学习记录 ↓</button><label class="outline-btn record-import" for="import-records">导入到本机 ↑</label><input id="import-records" type="file" accept="application/json,.json" hidden><small id="record-status" role="status"></small></div></div><div class="review-summary"><div><span>练习总次数</span><strong id="review-total">0</strong></div><div><span>当前待复盘</span><strong id="review-open">0</strong></div><div><span>近 7 天做对</span><strong id="review-week">0</strong></div></div><div class="review-layout"><div class="review-main"><div class="section-intro compact"><div><span class="section-kicker">YOUR ERROR LOG</span><h2>每一道错题，都有线索</h2></div></div><div id="review-list"></div></div><aside class="review-guide"><span class="section-kicker">REVIEW METHOD</span><h3>3 步复盘法</h3><ol><li><b>第一眼看到了什么？</b><span>如实写下题目给你的信号。</span></li><li><b>卡在了哪里？</b><span>是概念没懂、方向判断错，还是算错？</span></li><li><b>留下一句话</b><span>下次看到同类题，我先做什么。</span></li></ol><p>记录保存在当前浏览器。导出的 JSON 可以带到另一台设备，再用“导入到本机”合并进度。</p></aside></div></section>
         <section id="ask-view" class="view" aria-labelledby="ask-title">

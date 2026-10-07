@@ -33,6 +33,13 @@ try {
   assert.match(payload.messages[0].content, /合作效率相加/);
   assert.equal(payload.messages[0].content, routeSkill("quantity", base.question, "work").system);
   assert.equal(routeSkill("auto", "立方体展开图怎么判断？").routedMode, "spatial");
+  const essayQuestion='请点评申论作答。给定资料：'+ '社区治理材料。'.repeat(800);
+  const essay=await POST(request({...base,mode:'shenlun',question:essayQuestion}));
+  assert.equal(essay.status,200);
+  assert.equal((await essay.json()).skill,'shenlun');
+  const essayPayload=JSON.parse(captured.options.body);
+  assert.equal(essayPayload.messages.at(-1).content,essayQuestion);
+  assert.match(essayPayload.messages[0].content,/不把字数上限当满分/);
 
   const flash = await POST(request({ ...base, model: "glm-5.3-flash", mode: "spatial", lesson: "cube", image: "data:image/png;base64,aGVsbG8=" }));
   assert.equal(flash.status, 200);
