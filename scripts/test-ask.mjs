@@ -37,6 +37,17 @@ try {
   assert.equal(flashPayload.messages.at(-1).content[1].type, "image_url");
   assert.equal(flashPayload.thinking, undefined);
 
+  const deepseek = await POST(request({ ...base, model: "deepseek-flash", mode: "quantity", image: undefined }));
+  assert.equal(deepseek.status, 200);
+  assert.equal((await deepseek.json()).model, "deepseek-flash");
+  assert.equal(captured.upstream, "https://api.deepseek.com/chat/completions");
+  const deepseekPayload = JSON.parse(captured.options.body);
+  assert.equal(deepseekPayload.model, "deepseek-flash");
+  assert.equal(deepseekPayload.thinking, undefined);
+
+  const deepseekProImage = await POST(request({ ...base, model: "deepseek-v4-pro", mode: "spatial", lesson: "cube", image: "data:image/png;base64,aGVsbG8=" }));
+  assert.equal(deepseekProImage.status, 400);
+
   globalThis.fetch = async () => new Response("unauthorized", { status: 401 });
   const invalidKey = await POST(request(base));
   assert.equal(invalidKey.status, 401);

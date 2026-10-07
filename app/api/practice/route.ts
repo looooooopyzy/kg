@@ -1,6 +1,11 @@
 import { lessons, type LessonId } from "../../../lib/tutor-skills";
 
-const UPSTREAM = "https://open.bigmodel.cn/api/paas/v4/chat/completions";
+const MODEL_CONFIG = {
+  "glm-5.3": { upstream: "https://open.bigmodel.cn/api/paas/v4/chat/completions", provider: "智谱", thinking: true },
+  "glm-5.3-flash": { upstream: "https://open.bigmodel.cn/api/paas/v4/chat/completions", provider: "智谱", thinking: false },
+  "deepseek-flash": { upstream: "https://api.deepseek.com/chat/completions", provider: "DeepSeek", thinking: false },
+  "deepseek-v4-pro": { upstream: "https://api.deepseek.com/chat/completions", provider: "DeepSeek", thinking: true },
+} as const;
 const NO_STORE = { "Cache-Control": "no-store" };
 const TOPIC_NAMES: Record<LessonId, string> = {
   basics: "数量语言与总价", equation: "列方程", work: "工程问题", motion: "行程问题",
@@ -42,8 +47,9 @@ export async function POST(request: Request) {
   try { body = JSON.parse(raw); } catch { return error("请求格式不正确。", 400); }
   if (!body || typeof body !== "object") return error("请求格式不正确。", 400);
   const { apiKey, model, topic, level, previousStem } = body;
-  if (typeof apiKey !== "string" || apiKey.length < 8 || apiKey.length > 300 || /\s/.test(apiKey)) return error("请输入有效的智谱 API Key。", 400);
-  if (model !== "glm-5.3" && model !== "glm-5.3-flash") return error("请选择支持的模型。", 400);
+  if (typeof apiKey !== "string" || apiKey.length < 8 || apiKey.length > 300 || /\s/.test(apiKey)) return error("请输入有效的模型 API Key。", 400);
+  if (typeof model !== "string" || !(model in MODEL_CONFIG)) return error("请选择支持的模型。", 400);
+  const modelConfig = MODEL_CONFIG[model as keyof typeof MODEL_CONFIG];
   if (typeof topic !== "string" || !(topic in TOPIC_NAMES)) return error("知识点无效。", 400);
   if (typeof level !== "string" || !(level in LEVEL_NAMES)) return error("难度无效。", 400);
   if (previousStem !== undefined && (typeof previousStem !== "string" || previousStem.length > 500)) return error("上一题参数无效。", 400);
@@ -58,16 +64,16 @@ export async function POST(request: Request) {
   const user = `知识点：${TOPIC_NAMES[topicId]}\n核心规则：${lessons[topicId]}\n难度：${LEVEL_NAMES[level as keyof typeof LEVEL_NAMES]}\n与上一题不同：${previousStem || "无"}\n本轮随机编号：${crypto.randomUUID()}`;
   let upstream: Response;
   try {
-    upstream = await fetch(UPSTREAM, {
+    upstream = await fetch(modelConfig.upstream, {
       method: "POST",
       headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ model, messages: [{ role: "system", content: system }, { role: "user", content: user }], stream: false, max_tokens: 4096, ...(model === "glm-5.3" ? { thinking: { type: "enabled" }, reasoning_effort: "low" } : {}) }),
+      body: JSON.stringify({ model, messages: [{ role: "system", content: system }, { role: "user", content: user }], stream: false, max_tokens: 4096, ...(modelConfig.thinking ? { thinking: { type: "enabled" }, reasoning_effort: "low" } : {}) }),
       signal: AbortSignal.timeout(20000),
     });
   } catch { return error("模型连接超时或暂时不可用，请稍后重试。", 503); }
   if (!upstream.ok) {
-    if (upstream.status === 401 || upstream.status === 403) return error("API Key 验证失败，或该 Key 无权使用所选模型。", 401);
-    if (upstream.status === 429) return error("模型调用已达到限额或当前繁忙，请检查额度并稍后再试。", 429);
+    if (upstream.status === 401 || upstream.status === 403) return error(`${modelConfig.provider} API Key 验证失败，或该 Key 无权使用所选模型。`, 401);
+    if (upstream.status === 429) return error(`${modelConfig.provider} 调用已达到限额或当前繁忙，请检查额度并稍后再试。`, 429);
     return error(`模型服务返回错误（${upstream.status}）。请检查模型权限和账户额度。`, 502);
   }
   let data: { choices?: Array<{ message?: { content?: unknown } }> };

@@ -35,6 +35,13 @@ try {
   assert.equal(captured.options.headers.Authorization, "Bearer test-key-12345");
   assert.match(JSON.parse(captured.options.body).messages[1].content, /合作效率相加/);
 
+  const deepseek = await POST(request({ ...base, model: "deepseek-flash" }));
+  assert.equal(deepseek.status, 200);
+  assert.equal(captured.url, "https://api.deepseek.com/chat/completions");
+  const deepseekPayload = JSON.parse(captured.options.body);
+  assert.equal(deepseekPayload.model, "deepseek-flash");
+  assert.equal(deepseekPayload.thinking, undefined);
+
   globalThis.fetch = async () => Response.json({ choices: [{ message: { content: JSON.stringify({ ...exercise, finalAnswer: "9 天" }) } }] });
   assert.equal((await POST(request(base))).status, 502);
 

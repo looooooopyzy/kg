@@ -8,7 +8,7 @@
 - **国考真题**：从 [AdministrativeAptitudeTest](https://github.com/Yaoyuan-Zhang319/AdministrativeAptitudeTest) 的 2022 年国考副省级《行测》原卷抽取数量关系题，并与仓库的参考答案 PDF 核对；当前收录可完整提取的 14 题（61–72、74–75）。每题可按知识点和难度筛选，作答后查看本站重新编写的详细步骤、验算、易错点和原卷链接。课程中也嵌入对应真题；图片选项丢失的第 73 题暂不收录。
 - **空间图推**：可拖动或用方向键旋转的 CSS 三维立方体、对应的展开图、相对面练习及图形规律识别提示。
 - **错题复盘**：答错自动归档；记录第一眼特征、错因和下次的解题动作；支持学习记录 JSON 导出，以及在另一台设备导入并合并。
-- **AI 答疑**：选择 GLM-5.3 或 GLM-5.3-Flash，在页面输入自己的智谱 API Key；可提问、追问、从课程带入当前知识点，或在 Flash 下上传题目图片。服务端按问题类型选择数量关系、图形推理或结构化复盘的教学规则。
+- **AI 答疑**：可选择 GLM-5.3、GLM-5.3-Flash、DeepSeek-V4.1-Flash 或 DeepSeek-V4-Pro，在页面输入对应的模型 API Key；可提问、追问、从课程带入当前知识点，或在支持图片的 Flash 模型下上传题目图片。服务端按问题类型选择数量关系、图形推理或结构化复盘的教学规则。
 - **AI 同类题**：在数量关系课程和立方体图推中选择模型与难度，按当前知识点生成原创选择题；作答后展示逐步解法、验算和易错点，也可先看提示或直接查看解法。
 - **草稿纸**：页面右下角随时打开，支持 Apple Pencil、鼠标和触控笔；可切换画笔与橡皮、调整颜色和粗细、撤销、清空并导出 PNG。默认忽略手指触碰，可手动开启手指书写。
 - **多端使用**：网站提供 PWA 安装清单。Windows 和安卓浏览器可安装到桌面或主屏幕，iPhone/iPad 可在 Safari 中“分享 → 添加到主屏幕”；无需单独构建 iOS App。
@@ -18,9 +18,9 @@
 
 ## API Key 与数据
 
-API Key 只放在当前页面内存和当次请求中，不写入源码、浏览器存储或学习记录。页面将 Key、问题和可选图片通过本站 `/api/ask` 发往服务端；服务端仅转发给固定的智谱官方接口 `https://open.bigmodel.cn/api/paas/v4/chat/completions`，不保存 Key，也不把上游错误正文返回浏览器。刷新或关闭页面后需重新输入。
+API Key 只放在当前页面内存和当次请求中，不写入源码、浏览器存储或学习记录。页面会优先从浏览器直连所选模型的官方 OpenAI 兼容接口，直连失败再通过本站 `/api/ask` 服务端转发；服务端按所选模型转发到智谱 `https://open.bigmodel.cn/api/paas/v4/chat/completions` 或 DeepSeek `https://api.deepseek.com/chat/completions`，不保存 Key，也不把上游错误正文返回浏览器。刷新或关闭页面后需重新输入。
 
-生成同类题使用同一页面内存中的 Key，经 `/api/practice` 转发到同一固定接口。草稿笔迹单独保存在当前浏览器的 `localStorage` 中，不会随提问或出题请求发送给模型。可导出图片后手动清空。
+生成同类题使用同一页面内存中的 Key，优先直连所选模型，失败后经 `/api/practice` 转发到对应接口。草稿笔迹单独保存在当前浏览器的 `localStorage` 中，不会随提问或出题请求发送给模型。可导出图片后手动清空。
 
 使用者应自行确认所选模型的权限和额度。
 
@@ -47,4 +47,4 @@ npm run start
 
 动态图解采用原生 HTML/CSS/JavaScript 绘制。检索过现成教学图片与立方体示例后，选择自绘图解，以便让用户调整数字并看到即时变化。
 
-模型接口与名称见[智谱官方 GLM-5.3 文档](https://docs.bigmodel.cn/cn/guide/models/text/glm-5.3)和[GLM-5.3-Flash 文档](https://docs.bigmodel.cn/cn/guide/models/vlm/glm-5.3-flash)。
+模型接口与名称见[智谱官方 GLM-5.3 文档](https://docs.bigmodel.cn/cn/guide/models/text/glm-5.3)、[GLM-5.3-Flash 文档](https://docs.bigmodel.cn/cn/guide/models/vlm/glm-5.3-flash)、[DeepSeek 模型列表](https://api-docs.deepseek.com/api/list-models/)和[DeepSeek Chat Completions 文档](https://api-docs.deepseek.com/api/create-chat-completion/)。DeepSeek 图像题使用支持图片的 `deepseek-flash`，对应当前模型展示名 DeepSeek-V4.1-Flash，具体以官方更新为准。
