@@ -10,6 +10,7 @@ const request = (body) => new Request("https://example.test/api/ask", {
 const base = { apiKey: "test-key-12345", model: "glm-5.3", mode: "quantity", lesson: "work", question: "工程问题为什么要赋总量？", history: [] };
 
 assert.equal((await POST(request({ ...base, apiKey: "" }))).status, 400);
+assert.equal((await POST(request({ ...base, apiKey: "test-key-中文" }))).status, 400);
 assert.equal((await POST(request({ ...base, model: "other-model" }))).status, 400);
 assert.equal((await POST(request({ ...base, image: "data:image/png;base64,aGVsbG8=" }))).status, 400);
 

@@ -7,6 +7,7 @@ const request = body => new Request("https://example.test/api/practice", { metho
 const base = { apiKey: "test-key-12345", model: "glm-5.3-flash", topic: "work", level: "basic" };
 
 assert.equal((await POST(request({ ...base, apiKey: "" }))).status, 400);
+assert.equal((await POST(request({ ...base, apiKey: "test-key-中文" }))).status, 400);
 assert.equal((await POST(request({ ...base, topic: "not-a-lesson" }))).status, 400);
 assert.equal((await POST(request({ ...base, model: "unknown" }))).status, 400);
 

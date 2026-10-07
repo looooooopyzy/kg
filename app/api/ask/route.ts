@@ -47,7 +47,7 @@ export async function POST(request: Request) {
   const mode = body.mode;
   const lesson = body.lesson;
   const history = body.history;
-  if (typeof key !== "string" || key.length < 8 || key.length > 300 || /\s/.test(key)) return error("请输入有效的 API Key。", 400);
+  if (typeof key !== "string" || key.length < 8 || key.length > 300 || !/^[\x20-\x7E]+$/.test(key)) return error("请输入有效的模型 API Key（请去掉中文空格和不可见字符）。", 400);
   if (typeof model !== "string" || !(model in MODEL_CONFIG)) return error("请选择支持的模型。", 400);
   const modelConfig = MODEL_CONFIG[model as keyof typeof MODEL_CONFIG];
   if (typeof question !== "string" || question.trim().length < 2 || question.length > 4000) return error("问题需在 2 到 4000 字之间。", 400);
@@ -75,7 +75,7 @@ export async function POST(request: Request) {
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
       body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(40000),
+      signal: AbortSignal.timeout(18000),
     });
   } catch {
     return error("模型连接超时或暂时不可用，请稍后重试。", 503);

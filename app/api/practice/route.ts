@@ -61,7 +61,7 @@ export async function POST(request: Request) {
   try { body = JSON.parse(raw); } catch { return error("请求格式不正确。", 400); }
   if (!body || typeof body !== "object") return error("请求格式不正确。", 400);
   const { apiKey, model, topic, level, previousStem } = body;
-  if (typeof apiKey !== "string" || apiKey.length < 8 || apiKey.length > 300 || /\s/.test(apiKey)) return error("请输入有效的模型 API Key。", 400);
+  if (typeof apiKey !== "string" || apiKey.length < 8 || apiKey.length > 300 || !/^[\x20-\x7E]+$/.test(apiKey)) return error("请输入有效的模型 API Key（请去掉中文空格和不可见字符）。", 400);
   if (typeof model !== "string" || !(model in MODEL_CONFIG)) return error("请选择支持的模型。", 400);
   const modelConfig = MODEL_CONFIG[model as keyof typeof MODEL_CONFIG];
   if (typeof topic !== "string" || !(topic in TOPIC_NAMES)) return error("知识点无效。", 400);
@@ -82,7 +82,7 @@ export async function POST(request: Request) {
       method: "POST",
       headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
       body: JSON.stringify({ model, messages: [{ role: "system", content: system }, { role: "user", content: user }], stream: false, max_tokens: 12000, ...(modelConfig.thinking ? { thinking: { type: "enabled" }, reasoning_effort: "low" } : {}) }),
-      signal: AbortSignal.timeout(40000),
+      signal: AbortSignal.timeout(18000),
     });
   } catch { return error("模型连接超时或暂时不可用，请稍后重试。", 503); }
   if (!upstream.ok) {
