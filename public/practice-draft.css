@@ -72,6 +72,7 @@
 .real-inline>p,.real-empty-note{font-size:12px;line-height:1.85;color:var(--muted);margin:0 0 15px}
 .real-inline .real-card{box-shadow:none;margin-top:12px}
 .real-inline .real-card h4{font-size:20px}
+.personal-bank-analysis{margin:14px 0 0;padding:15px 17px;border-radius:11px;background:#f3f7f1;color:var(--ink);font-size:12px;line-height:1.9;white-space:pre-wrap}
 .draft-toggle{position:fixed;right:24px;bottom:22px;z-index:50;border:0;border-radius:999px;background:var(--green-dark);color:#fff;padding:13px 19px;font-weight:700;box-shadow:0 12px 30px #173d3470;display:flex;align-items:center;gap:9px}
 .draft-toggle[hidden]{display:none}
 .draft-toggle:hover{background:#0f3c34;transform:translateY(-2px)}

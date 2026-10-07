@@ -45,3 +45,5 @@ next-env.d.ts
 /.codex/
 /outputs/
 /work/
+# Personal study copy of third-party question banks. Do not publish.
+/.local-data/

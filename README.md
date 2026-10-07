@@ -6,6 +6,7 @@
 
 - **数量关系**：8 个递进知识点，包含白话解释、三步解题、动态数字实验台、真题难度的条件转译与解题策略、原卷题目和原创练习。图解会随滑块变化。
 - **国考真题**：从 [AdministrativeAptitudeTest](https://github.com/Yaoyuan-Zhang319/AdministrativeAptitudeTest) 的 2022 年国考副省级《行测》原卷抽取数量关系题，并与仓库的参考答案 PDF 核对；当前收录可完整提取的 14 题（61–72、74–75）。每题可按知识点和难度筛选，作答后查看本站重新编写的详细步骤、验算、易错点和原卷链接。课程中也嵌入对应真题；图片选项丢失的第 73 题暂不收录。
+- **本机个人题库**：本地运行时可读取 [ERRRC/kaogong-shuati](https://github.com/ERRRC/kaogong-shuati) 的个人学习副本，在数量关系课程中抽取同知识点文字题，作答后查看原题解析、记录错题并继续问 AI。题库数据不纳入本站源码或线上部署；下载方法见 [DEVELOPMENT.md](./DEVELOPMENT.md)。
 - **空间图推**：可拖动或用方向键旋转的 CSS 三维立方体、对应的展开图、相对面练习及图形规律识别提示。
 - **错题复盘**：答错自动归档；记录第一眼特征、错因和下次的解题动作；支持学习记录 JSON 导出，以及在另一台设备导入并合并。
 - **AI 答疑**：可选择 GLM-5.3、GLM-5.3-Flash、DeepSeek-V4.1-Flash 或 DeepSeek-V4-Pro，在页面输入对应的模型 API Key；可提问、追问、从课程带入当前知识点，或在支持图片的 Flash 模型下上传题目图片。服务端按问题类型选择数量关系、图形推理或结构化复盘的教学规则。
@@ -34,7 +35,7 @@ npm run build
 npm run start
 ```
 
-默认打开 <http://127.0.0.1:8787/>。开发时也可以运行 `npm run dev`。接口模拟测试：`node scripts/test-ask.mjs` 和 `node scripts/test-practice.mjs`。
+默认打开 <http://127.0.0.1:8787/>。若要使用本机个人题库，先运行 `node scripts/fetch-personal-bank.mjs`，然后运行 `npm run local`（同时启动网站和本机题库服务）。开发时也可以运行 `npm run dev`。接口模拟测试：`node scripts/test-ask.mjs` 和 `node scripts/test-practice.mjs`。
 
 完整的本地运行和与其他编码工具协作方式见 [`DEVELOPMENT.md`](./DEVELOPMENT.md)。Windows 可以直接运行 `npm run local`，或执行 `scripts/start-local.ps1`。
 
@@ -46,6 +47,7 @@ npm run start
 - [huasheng13-skill](https://github.com/WangJunqing-coder/huasheng13-skill)：数量关系方法及图推分类。
 - [kaogong-review-skill](https://github.com/zheng489/kaogong-review-skill)：错因归类与结构化复盘流程。
 - [AdministrativeAptitudeTest](https://github.com/Yaoyuan-Zhang319/AdministrativeAptitudeTest)：历年试卷与参考答案 PDF；本站只摘录当前用于讲解的题目，保留原卷链接。
+- [kaogong-shuati](https://github.com/ERRRC/kaogong-shuati)：本机个人学习题库及模块树、学习统计、自定义题库等功能设计参考。该项目说明题库数据只供个人学习，不得商用或二次分发；本站只提供本地下载脚本，数据保存在 Git 忽略目录。
 
 动态图解采用原生 HTML/CSS/JavaScript 绘制。检索过现成教学图片与立方体示例后，选择自绘图解，以便让用户调整数字并看到即时变化。
 

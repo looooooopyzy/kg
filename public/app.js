@@ -63,7 +63,7 @@ function refreshStats(){let count=state.mastered.length;let open=state.reviews.f
 function renderLessonNav(){document.getElementById('lesson-nav').innerHTML=lessons.map(l=>`<button class="lesson-nav-item ${l.id===currentLesson?'selected':''}" data-lesson="${l.id}"><span class="num">${l.no}</span><span><b>${l.title}</b><small>${l.subtitle}</small></span>${state.mastered.includes(l.id)?'<span class="done">✓</span>':''}</button>`).join('');document.querySelectorAll('[data-lesson]').forEach(b=>b.addEventListener('click',()=>{currentLesson=b.dataset.lesson;state.lastLesson=currentLesson;save();renderLesson();document.getElementById('quantity-title').scrollIntoView({behavior:'smooth'})}))}
 function renderLesson(){let l=lessons.find(x=>x.id===currentLesson)||lessons[0];hintShown=false;answered=false;renderLessonNav();document.getElementById('lesson-content').innerHTML=`<div class="lesson-meta">LESSON ${l.no} / 08 · ${l.tag}</div><div class="lesson-title-row"><h2>${l.title}</h2>${state.mastered.includes(l.id)?'<span class="mastery-pill">✓ 已掌握</span>':''}</div><p class="lesson-desc">${l.subtitle}</p><div class="lesson-block"><div class="block-label">01 / UNDERSTAND</div><h3>先把问题说清楚</h3><p>${l.intro}</p><div class="insight-box">✳　${l.insight}</div><div class="formula-box"><span>∑</span><strong>${l.formula}</strong></div></div><div class="lesson-block"><div class="block-label">02 / BREAK IT DOWN</div><h3>解题只走这三步</h3><div class="steps">${l.steps.map((s,i)=>`<div class="step"><span>0${i+1}</span><b>${s[0]}</b><small>${s[1]}</small></div>`).join('')}</div></div><div class="lesson-block"><div class="block-label">03 / PLAY WITH THE NUMBERS</div><h3>动手调一调</h3><p>拖动数字，观察图形和结果怎样一起变化。先形成直觉，再记方法。</p><div class="explorer" id="explorer"></div></div><div class="lesson-block"><div class="block-label">04 / WORKED EXAMPLE</div><h3>跟着做一道</h3><div class="worked-card"><div class="question">${l.example}</div><ol>${l.solution.map(s=>`<li>${s}</li>`).join('')}</ol></div><div class="mistake-note"><span>↗</span><span><b>容易混淆：</b>${l.pitfall}</span></div></div><div class="lesson-block"><div class="block-label">05 / YOUR TURN</div><h3>现在试一试</h3><div class="quiz-card"><h4>原创模拟练习</h4><p class="quiz-prompt">${l.quiz.prompt}</p><div class="quiz-options">${l.quiz.options.map((o,i)=>`<button class="option-btn" data-answer="${i}"><span class="letter">${'ABCD'[i]}</span><span>${o}</span></button>`).join('')}</div><div id="lesson-feedback" class="quiz-feedback" aria-live="polite"></div><div class="quiz-actions"><button class="subtle-btn" id="show-hint">给我一点提示 →</button><button class="subtle-btn" id="retry-quiz" hidden>再试一次 ↺</button></div></div></div><div class="lesson-footer"><small>上面的基础练习与 AI 同类题是模拟题；原卷真题已标明来源。</small><button class="primary-btn" id="next-lesson">${l.no==='08'?'去看错题复盘':'下一知识点'} <span>→</span></button></div>`;
   document.querySelectorAll('#lesson-content .lesson-block')[4].insertAdjacentHTML('afterend',renderExamBridge(l));
-  document.querySelector('#lesson-content .lesson-footer').insertAdjacentHTML('beforebegin','<div id="lesson-real"></div><div id="lesson-practice"></div>');renderPractice('lesson-practice',l.id);loadRealQuestions().then(()=>renderInlineRealQuestion(l.id)).catch(()=>{const box=document.getElementById('lesson-real');if(box)box.textContent='真题暂时无法加载，请稍后刷新重试。'});renderExplorer(l.explorer);document.querySelectorAll('#lesson-content [data-answer]').forEach(b=>b.addEventListener('click',()=>answerLesson(l,+b.dataset.answer)));document.getElementById('show-hint').addEventListener('click',()=>{if(answered)return;hintShown=true;document.getElementById('lesson-feedback').className='quiz-feedback';document.getElementById('lesson-feedback').textContent='提示：'+l.quiz.hint});document.getElementById('retry-quiz').addEventListener('click',()=>renderLesson());document.getElementById('next-lesson').addEventListener('click',()=>{let idx=lessons.findIndex(x=>x.id===currentLesson);if(idx===lessons.length-1){switchView('review')}else{currentLesson=lessons[idx+1].id;state.lastLesson=currentLesson;save();renderLesson();document.getElementById('quantity-title').scrollIntoView({behavior:'smooth'})}})
+  document.querySelector('#lesson-content .lesson-footer').insertAdjacentHTML('beforebegin','<div id="lesson-real"></div><div id="lesson-bank"></div><div id="lesson-practice"></div>');renderPractice('lesson-practice',l.id);loadRealQuestions().then(()=>renderInlineRealQuestion(l.id)).catch(()=>{const box=document.getElementById('lesson-real');if(box)box.textContent='真题暂时无法加载，请稍后刷新重试。'});renderPersonalBank(l.id);renderExplorer(l.explorer);document.querySelectorAll('#lesson-content [data-answer]').forEach(b=>b.addEventListener('click',()=>answerLesson(l,+b.dataset.answer)));document.getElementById('show-hint').addEventListener('click',()=>{if(answered)return;hintShown=true;document.getElementById('lesson-feedback').className='quiz-feedback';document.getElementById('lesson-feedback').textContent='提示：'+l.quiz.hint});document.getElementById('retry-quiz').addEventListener('click',()=>renderLesson());document.getElementById('next-lesson').addEventListener('click',()=>{let idx=lessons.findIndex(x=>x.id===currentLesson);if(idx===lessons.length-1){switchView('review')}else{currentLesson=lessons[idx+1].id;state.lastLesson=currentLesson;save();renderLesson();document.getElementById('quantity-title').scrollIntoView({behavior:'smooth'})}})
 }
 function answerLesson(l,index){if(answered)return;answered=true;let correct=index===l.quiz.answer;state.attempts.push({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),kind:'quantity',topic:l.id,correct,date:new Date().toISOString()});if(correct&&!state.mastered.includes(l.id))state.mastered.push(l.id);if(!correct)addReview({kind:'quantity',topic:l.id,title:l.title,question:l.quiz.prompt,chosen:l.quiz.options[index],answer:l.quiz.options[l.quiz.answer],explain:l.quiz.explain});save();document.querySelectorAll('#lesson-content [data-answer]').forEach((b,i)=>{b.disabled=true;if(i===l.quiz.answer)b.classList.add('correct');if(i===index&&!correct)b.classList.add('wrong')});let f=document.getElementById('lesson-feedback');f.className='quiz-feedback '+(correct?'good':'bad');f.innerHTML=(correct?'✓ 答对了！':'这一步再想想。')+' '+esc(l.quiz.explain)+(correct?'<br>这一课已计入“已掌握”。':'<br>已加入错题复盘，可记录卡点后再试。');document.getElementById('retry-quiz').hidden=correct;document.getElementById('show-hint').hidden=true;renderLessonNav()}
 function addReview(r){state.reviews.unshift({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),date:new Date().toISOString(),seen:'',reason:'',takeaway:'',reviewed:false,...r})}
@@ -166,6 +166,53 @@ function renderRealCard(root,q,next,label){
     detail.append(solution);
   }
   root.replaceChildren(card);
+}
+// The personal-study bank is served only by the local Windows/Node process.
+const personalBankState=new Map(),personalBankRecent=new Map();
+const localBankPage=['127.0.0.1','localhost'].includes(location.hostname);
+async function renderPersonalBank(topic,force=false){
+  const root=document.getElementById('lesson-bank');
+  if(!root||!localBankPage)return;
+  const entry=personalBankState.get(topic);
+  if(entry&&!force){showPersonalBank(root,topic,entry);return}
+  root.innerHTML='<div class="lesson-block real-inline"><div class="block-label">08 / PERSONAL QUESTION BANK</div><h3>本机题库 · 同类题</h3><p>正在挑选一道文字完整的题目…</p></div>';
+  try{
+    const recent=personalBankRecent.get(topic)||[];
+    const response=await fetch(`http://127.0.0.1:8788/api/bank/question?topic=${encodeURIComponent(topic)}&exclude=${recent.join(',')}`,{cache:'no-store'});
+    const question=await response.json();
+    if(!response.ok)throw new Error(question.error||question.message||'本机题库暂时不可用。');
+    if(!root.isConnected||currentLesson!==topic)return;
+    personalBankRecent.set(topic,[...recent.slice(-9),question.id]);
+    const next={question,choice:null,revealed:false};
+    personalBankState.set(topic,next);
+    showPersonalBank(root,topic,next);
+  }catch(error){
+    if(!root.isConnected||currentLesson!==topic)return;
+    root.innerHTML=`<div class="lesson-block real-inline"><div class="block-label">08 / PERSONAL QUESTION BANK</div><h3>本机题库 · 同类题</h3><p>${esc(error.message||'本机题库暂时不可用。')} 运行 npm run local 后可在这里练习。</p><button class="text-btn" type="button" data-bank-retry>重新连接 →</button></div>`;
+    root.querySelector('[data-bank-retry]').addEventListener('click',()=>renderPersonalBank(topic,true));
+  }
+}
+function showPersonalBank(root,topic,entry){
+  const q=entry.question;
+  root.innerHTML=`<div class="lesson-block real-inline"><div class="block-label">08 / PERSONAL QUESTION BANK</div><h3>本机题库 · 同类题</h3><p>当前知识点筛出 ${q.topicCount} 道文字完整的题。先独立作答，再核对原题解析；题型匹配依据题干关键词，请自行判断是否贴合本课。</p><div class="real-card"><div class="real-card-top"><span class="real-badge">个人学习副本</span><span>${esc(q.paper)}</span><span>${esc(q.category)}</span></div><h4>试着找出关键条件</h4><p class="real-stem">${esc(q.stem)}</p><div class="real-options">${q.options.map((option,index)=>`<button type="button" data-bank-option="${index}" ${entry.revealed?'disabled':''} class="${entry.revealed?(index===q.answerIndex?'correct':index===entry.choice?'wrong':''):''}"><b>${'ABCD'[index]}</b><span>${esc(option)}</span></button>`).join('')}</div><div class="real-actions"><button class="text-btn" type="button" data-bank-reveal ${entry.revealed?'hidden':''}>查看答案与解析 →</button><button class="text-btn" type="button" data-bank-draft>打开草稿纸 ✎</button><button class="text-btn" type="button" data-bank-ask>让 AI 分步讲解 ↗</button><button class="text-btn" type="button" data-bank-next>换一道同类题 →</button></div><div class="real-detail" aria-live="polite"></div><div class="real-source"><a href="https://github.com/ERRRC/kaogong-shuati" target="_blank" rel="noopener noreferrer">题库项目与使用说明 ↗</a><span>题目仅供本机个人学习，不随网站发布</span></div></div></div>`;
+  root.querySelectorAll('[data-bank-option]').forEach(button=>button.addEventListener('click',()=>{
+    if(entry.revealed)return;
+    entry.choice=Number(button.dataset.bankOption);entry.revealed=true;
+    const correct=entry.choice===q.answerIndex;
+    state.attempts.push({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),kind:'personal-bank',topic,number:q.id,correct,date:new Date().toISOString()});
+    if(!correct)addReview({kind:'personal-bank',topic,title:`${q.paper} · ${practiceTitles[topic]||'数量关系'}`,question:q.stem,chosen:'ABCD'[entry.choice]+' '+q.options[entry.choice],answer:'ABCD'[q.answerIndex]+' '+q.options[q.answerIndex],explain:q.analysis});
+    save();showPersonalBank(root,topic,entry);
+  }));
+  root.querySelector('[data-bank-reveal]')?.addEventListener('click',()=>{entry.revealed=true;showPersonalBank(root,topic,entry)});
+  root.querySelector('[data-bank-draft]').addEventListener('click',()=>document.getElementById('draft-toggle').click());
+  root.querySelector('[data-bank-next]').addEventListener('click',()=>renderPersonalBank(topic,true));
+  root.querySelector('[data-bank-ask]').addEventListener('click',()=>askFromContext('quantity',`请讲解这道题，先判断它与「${practiceTitles[topic]||'数量关系'}」的关系，再解释关键条件、列式理由和验算：\n${q.stem}\n${q.options.map((option,index)=>`${'ABCD'[index]}. ${option}`).join('\n')}`,topic));
+  if(entry.revealed){
+    const detail=root.querySelector('.real-detail');
+    const feedback=document.createElement('div');feedback.className='generated-feedback '+(entry.choice===q.answerIndex?'good':'bad');feedback.textContent=entry.choice===null?`参考答案：${'ABCD'[q.answerIndex]}。`:entry.choice===q.answerIndex?`答对了！参考答案：${'ABCD'[q.answerIndex]}。`:`你选了 ${'ABCD'[entry.choice]}；参考答案：${'ABCD'[q.answerIndex]}。已加入错题复盘。`;
+    const analysis=document.createElement('p');analysis.className='personal-bank-analysis';analysis.textContent=q.analysis;
+    detail.append(feedback,analysis);
+  }
 }
 document.getElementById('real-topic').addEventListener('change',()=>{realIndex=0;renderRealView()});
 document.getElementById('real-level').addEventListener('change',()=>{realIndex=0;renderRealView()});
