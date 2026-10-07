@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { build } from "esbuild";
+import { routeSkill } from "../public/tutor-skills.js";
 
 const compiled = await build({ entryPoints: ["app/api/ask/route.ts"], bundle: true, platform: "node", format: "esm", write: false });
 const url = `data:text/javascript;base64,${Buffer.from(compiled.outputFiles[0].text).toString("base64")}`;
@@ -30,6 +31,8 @@ try {
   assert.equal(payload.model, "glm-5.3");
   assert.equal(payload.thinking.type, "enabled");
   assert.match(payload.messages[0].content, /合作效率相加/);
+  assert.equal(payload.messages[0].content, routeSkill("quantity", base.question, "work").system);
+  assert.equal(routeSkill("auto", "立方体展开图怎么判断？").routedMode, "spatial");
 
   const flash = await POST(request({ ...base, model: "glm-5.3-flash", mode: "spatial", lesson: "cube", image: "data:image/png;base64,aGVsbG8=" }));
   assert.equal(flash.status, 200);

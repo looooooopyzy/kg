@@ -42,7 +42,7 @@ npm run start
 
 ## 内容参考
 
-内容结构、方法分类和复盘字段参考以下开源 skill；讲解、图解和题目针对网页重新编写。答疑接口在服务端根据问题类型注入整理后的对应教学规则，并不运行第三方仓库脚本。
+内容结构、方法分类和复盘字段参考以下开源 skill；讲解、图解和题目针对网页重新编写。AI 答疑按题型选用整理后的对应教学规则，浏览器直连和服务端转发共用同一份规则；网站不会执行第三方仓库脚本。
 
 - [kaogong-skill](https://github.com/KeWang0622/kaogong-skill)：行测题型框架与内容准确性原则。
 - [huasheng13-skill](https://github.com/WangJunqing-coder/huasheng13-skill)：数量关系方法及图推分类。
