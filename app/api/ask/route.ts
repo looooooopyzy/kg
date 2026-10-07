@@ -55,7 +55,7 @@ export async function POST(request: Request) {
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
       body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(65000),
+      signal: AbortSignal.timeout(20000),
     });
   } catch {
     return error("模型连接超时或暂时不可用，请稍后重试。", 503);

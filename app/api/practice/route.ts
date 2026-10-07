@@ -62,7 +62,7 @@ export async function POST(request: Request) {
       method: "POST",
       headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
       body: JSON.stringify({ model, messages: [{ role: "system", content: system }, { role: "user", content: user }], stream: false, max_tokens: 4096, ...(model === "glm-5.3" ? { thinking: { type: "enabled" }, reasoning_effort: "low" } : {}) }),
-      signal: AbortSignal.timeout(65000),
+      signal: AbortSignal.timeout(20000),
     });
   } catch { return error("模型连接超时或暂时不可用，请稍后重试。", 503); }
   if (!upstream.ok) {
