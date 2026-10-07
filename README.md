@@ -36,6 +36,8 @@ npm run start
 
 默认打开 <http://127.0.0.1:8787/>。开发时也可以运行 `npm run dev`。接口模拟测试：`node scripts/test-ask.mjs` 和 `node scripts/test-practice.mjs`。
 
+完整的本地运行和与其他编码工具协作方式见 [`DEVELOPMENT.md`](./DEVELOPMENT.md)。Windows 可以直接运行 `npm run local`，或执行 `scripts/start-local.ps1`。
+
 ## 内容参考
 
 内容结构、方法分类和复盘字段参考以下开源 skill；讲解、图解和题目针对网页重新编写。答疑接口在服务端根据问题类型注入整理后的对应教学规则，并不运行第三方仓库脚本。
