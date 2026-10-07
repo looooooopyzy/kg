@@ -1,0 +1,16 @@
+{
+  "id": "/",
+  "name": "解题有形 · 行测理解实验室",
+  "short_name": "解题有形",
+  "description": "数量关系与图形推理互动学习、国考真题、错题复盘和 AI 答疑。",
+  "lang": "zh-CN",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f5f2e9",
+  "theme_color": "#25695d",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
