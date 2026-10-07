@@ -1,0 +1,63 @@
+.practice-card{margin:30px 0;padding:25px;border:1px solid #d5e2d5;border-radius:16px;background:#f0f5ec}
+#spatial-practice .practice-card{margin:17px 0 0;background:var(--white)}
+.practice-head{display:flex;justify-content:space-between;align-items:start;gap:16px}
+.practice-head h3{font:700 23px var(--serif);margin:9px 0 7px}
+.practice-head p{color:var(--muted);font-size:12px;line-height:1.75;margin:0}
+.practice-head .primary-btn{white-space:nowrap}
+.practice-config{display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:10px;margin-top:22px}
+.practice-config label{display:grid;gap:6px;color:var(--green-dark);font-size:11px;font-weight:700}
+.practice-config select,.practice-config input{min-width:0;width:100%;border:1px solid #cbd9cd;border-radius:9px;background:var(--white);padding:11px;color:var(--ink);font-size:11px}
+.practice-note{font-size:10px;color:var(--muted);line-height:1.7;margin:12px 0 0}
+.practice-status{min-height:18px;color:var(--green);font-size:11px;margin-top:9px}
+.practice-status.error{color:#ab593d}
+.practice-result{margin-top:12px}
+.generated-question{background:var(--white);border:1px solid #dce4d9;border-radius:13px;padding:23px}
+.generated-question h4{font:700 18px var(--serif);margin:0 0 12px}
+.generated-question>p{font-size:13px;line-height:1.85;margin:0 0 17px;white-space:pre-wrap}
+.generated-options{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.generated-options button{border:1px solid #dce3da;background:#f8faf6;border-radius:9px;padding:11px;text-align:left;font-size:12px;line-height:1.6;color:var(--ink)}
+.generated-options button:hover:not(:disabled){border-color:var(--green);background:#e9f1e9}
+.generated-options button.correct{border-color:#569775;background:#e2f1e6}
+.generated-options button.wrong{border-color:#d68972;background:#fae8df}
+.generated-options button:disabled{cursor:default}
+.generated-options b{font:700 12px var(--mono);color:var(--green);margin-right:8px}
+.generated-help{display:flex;gap:18px;flex-wrap:wrap;margin-top:13px;align-items:center}
+.generated-hint{background:#fff5e5;border-left:3px solid var(--orange);padding:10px 12px;font-size:11px;line-height:1.7;margin-top:9px}
+.generated-feedback{margin:18px 0 0;padding:12px;border-radius:8px;font-size:12px;font-weight:700}
+.generated-feedback.good{background:#e4f2e7;color:#2d7151}
+.generated-feedback.bad{background:#f9ece4;color:#a6533c}
+.generated-solution{margin-top:18px;border-top:1px solid var(--line);padding-top:18px}
+.generated-solution h5{font:700 17px var(--serif);margin:0 0 13px}
+.generated-solution ol{margin:0;padding-left:23px;display:grid;gap:9px}
+.generated-solution li{font-size:12px;line-height:1.85;white-space:pre-wrap}
+.generated-solution p{font-size:12px;line-height:1.8;margin:13px 0 0;white-space:pre-wrap}
+.generated-solution strong{color:var(--green-dark)}
+.draft-toggle{position:fixed;right:24px;bottom:22px;z-index:50;border:0;border-radius:999px;background:var(--green-dark);color:#fff;padding:13px 19px;font-weight:700;box-shadow:0 12px 30px #173d3470;display:flex;align-items:center;gap:9px}
+.draft-toggle[hidden]{display:none}
+.draft-toggle:hover{background:#0f3c34;transform:translateY(-2px)}
+.draft-panel{position:fixed;right:23px;bottom:82px;z-index:60;width:min(590px,calc(100vw - 46px));height:min(70vh,660px);min-height:420px;border:1px solid #c9d8c9;border-radius:20px;background:var(--white);box-shadow:0 25px 70px #152e2b55;display:flex;flex-direction:column;overflow:hidden}
+.draft-panel[hidden]{display:none}
+.draft-header{padding:17px 20px 8px;display:flex;align-items:start;justify-content:space-between}
+.draft-header h2{font:700 22px var(--serif);margin:4px 0 0}
+.draft-close{border:0;background:#ebf0e9;color:var(--green-dark);border-radius:50%;width:32px;height:32px;font-size:22px;line-height:1}
+.draft-help{font-size:11px;line-height:1.6;color:var(--muted);margin:0;padding:0 20px 11px}
+.draft-toolbar{display:flex;gap:7px;align-items:center;flex-wrap:wrap;padding:10px 15px;border-top:1px solid #e2e9df;border-bottom:1px solid #e2e9df;background:#f5f7f1}
+.draft-toolbar button,.draft-actions button{border:1px solid #cadacb;border-radius:8px;background:#fffefa;color:var(--green-dark);padding:8px 10px;font-size:11px;font-weight:700}
+.draft-toolbar button.selected{background:var(--green-dark);border-color:var(--green-dark);color:#fff}
+.draft-toolbar .draft-color{width:28px;height:28px;min-width:28px;padding:0;border-radius:50%;background:var(--draft-color);border:2px solid #fffefa;box-shadow:0 0 0 1px #bbc9bd}
+.draft-toolbar .draft-color.selected{box-shadow:0 0 0 2px var(--orange);border:2px solid #fffefa}
+.draft-toolbar [data-draft-color="#20342e"]{--draft-color:#20342e}
+.draft-toolbar [data-draft-color="#d1694e"]{--draft-color:#d1694e}
+.draft-toolbar [data-draft-color="#315d75"]{--draft-color:#315d75}
+.draft-width-label{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);margin-left:auto}
+.draft-width-label input{width:72px;accent-color:var(--green)}
+.draft-canvas-wrap{flex:1;min-height:0;margin:12px 15px 0;border:1px solid #dbe5da;border-radius:8px;background-color:#fffef9;background-image:linear-gradient(#bfd5ce47 1px,transparent 1px),linear-gradient(90deg,#bfd5ce47 1px,transparent 1px);background-size:24px 24px;overflow:hidden}
+#draft-canvas{display:block;width:100%;height:100%;touch-action:none;cursor:crosshair}
+.draft-actions{padding:13px 15px 8px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.draft-actions>div{display:flex;gap:6px;flex-wrap:wrap}
+.draft-finger{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px}
+.draft-finger input{accent-color:var(--green)}
+#draft-status{font-size:10px;color:var(--muted);padding:0 16px 12px;line-height:1.5}
+@media(max-width:850px){.practice-config{grid-template-columns:1fr 1fr}.practice-config label:last-child{grid-column:1/-1}}
+@media(max-width:850px){.quantity-layout{grid-template-columns:minmax(0,1fr)}.lesson-list,.lesson-content{min-width:0}#lesson-nav{max-width:100%}}
+@media(max-width:620px){.practice-card{padding:19px}.practice-head{display:block}.practice-head .primary-btn{margin-top:14px}.practice-config{grid-template-columns:1fr}.practice-config label:last-child{grid-column:auto}.generated-options{grid-template-columns:1fr}.draft-panel{right:0;bottom:0;width:100vw;height:min(83dvh,740px);min-height:340px;border-radius:20px 20px 0 0}.draft-toggle{right:17px;bottom:15px}.draft-toolbar{gap:5px}.draft-width-label{margin-left:0}}

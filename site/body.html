@@ -49,3 +49,19 @@
       <footer class="footer"><span>解题有形 © 2026 · 原创模拟练习</span><div>参考 <a href="https://github.com/KeWang0622/kaogong-skill" target="_blank" rel="noopener noreferrer">考公 AI 导师</a> · <a href="https://github.com/WangJunqing-coder/huasheng13-skill" target="_blank" rel="noopener noreferrer">公考花生十三 skill</a> · <a href="https://github.com/zheng489/kaogong-review-skill" target="_blank" rel="noopener noreferrer">考公复盘 skill</a></div></footer>
     </div>
   </div>
+  <button id="draft-toggle" class="draft-toggle" type="button" aria-expanded="false" aria-controls="draft-panel">✎ <span>草稿纸</span></button>
+  <section id="draft-panel" class="draft-panel" aria-labelledby="draft-title" hidden>
+    <div class="draft-header"><div><span class="section-kicker">YOUR SCRATCH PAPER</span><h2 id="draft-title">随手打草稿</h2></div><button id="draft-close" class="draft-close" type="button" aria-label="关闭草稿纸">×</button></div>
+    <p class="draft-help">支持 Apple Pencil、鼠标和触控笔。默认忽略手指触碰，减少误画。</p>
+    <div class="draft-toolbar" role="toolbar" aria-label="草稿工具">
+      <button type="button" data-draft-tool="pen" class="selected" aria-pressed="true">✎ 画笔</button>
+      <button type="button" data-draft-tool="eraser" aria-pressed="false">◌ 橡皮</button>
+      <button type="button" data-draft-color="#20342e" class="draft-color selected" aria-label="深绿画笔" aria-pressed="true"></button>
+      <button type="button" data-draft-color="#d1694e" class="draft-color" aria-label="橘色画笔" aria-pressed="false"></button>
+      <button type="button" data-draft-color="#315d75" class="draft-color" aria-label="蓝色画笔" aria-pressed="false"></button>
+      <label class="draft-width-label">笔粗 <input id="draft-width" type="range" min="2" max="12" value="4" aria-label="画笔粗细"></label>
+    </div>
+    <div class="draft-canvas-wrap"><canvas id="draft-canvas" aria-label="草稿绘画区域，可用 Apple Pencil、鼠标或触控笔书写"></canvas></div>
+    <div class="draft-actions"><label class="draft-finger"><input id="draft-finger" type="checkbox"> 允许手指书写</label><div><button id="draft-undo" type="button">撤销</button><button id="draft-clear" type="button">清空</button><button id="draft-export" type="button">保存图片 ↓</button></div></div>
+    <small id="draft-status" role="status">草稿保存在当前浏览器，不会随提问发给模型。</small>
+  </section>
